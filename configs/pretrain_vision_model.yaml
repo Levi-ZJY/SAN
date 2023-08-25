@@ -1,0 +1,51 @@
+global:
+  name: pretrain-vision-model
+  phase: train
+  stage: pretrain-vision
+  workdir: workdir
+  seed: ~
+ 
+dataset:
+  train: {
+    roots: ['data/scene/scene_train/'],
+    batch_size: 176
+  }
+  test: {
+    roots: ['data/scene/scene_val/'],
+    batch_size: 176
+  }
+  data_aug: True
+  multiscales: False
+  num_workers: 14
+  if_radical_vision_model: True
+
+training:
+  epochs: 20
+  show_iters: 50
+  eval_iters: 500
+  save_iters: 200
+
+optimizer:
+  type: Adam
+  true_wd: False
+  wd: 0.0
+  bn_wd: False
+  clip_grad: 20
+  lr: 0.0001
+  args: {
+    betas: !!python/tuple [0.9, 0.999], # for default Adam 
+  }
+  scheduler: {
+    periods: [15, 5],
+    gamma: 0.1,
+  }
+
+model:
+  name: 'modules.model_vision.BaseVision'
+  checkpoint: ~
+  vision: {
+    loss_weight: 1.,
+    attention: 'position',
+    backbone: 'transformer',
+    backbone_ln: 3,
+  }

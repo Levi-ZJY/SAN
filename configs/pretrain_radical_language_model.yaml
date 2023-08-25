@@ -1,0 +1,46 @@
+global:
+  name: pretrain-radical-language-model
+  phase: train
+  stage: pretrain-radical-language
+  workdir: workdir
+  seed: ~
+ 
+dataset:
+  train: {
+    roots: ['data/LM_Dataset_scene_radical/scene_radical_label.csv'],
+    batch_size: 768
+  }
+  test: {
+    roots: ['data/LM_Dataset_scene_radical/scene_radical_label_change.csv'],
+    batch_size: 768
+  }
+  if_radical_language_model: True
+
+training:
+  epochs: 200
+  show_iters: 50
+  eval_iters: 500
+  save_iters: 200
+
+optimizer:
+  type: Adam
+  true_wd: False
+  wd: 0.0
+  bn_wd: False
+  clip_grad: 20
+  lr: 0.0001
+  args: {
+    betas: !!python/tuple [0.9, 0.999], # for default Adam 
+  }
+  scheduler: {
+    periods: [175, 25],
+    gamma: 0.1,
+  }
+
+model:
+  name: 'modules.model_radical_language.BCNRadicalLanguage'
+  language: {
+    num_layers: 4,
+    loss_weight: 1.,
+    use_self_attn: False
+  }
