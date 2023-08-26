@@ -1,5 +1,8 @@
 
-# SAN-Code
+# SAN: Structure-Aware Network for Complex and Long-tailed Chinese Text Recognition
+
+The official code of SAN (ICDAR 2023)
+
 
 ## Runtime Environment
 - Using the dependencies
@@ -87,3 +90,18 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 python main.py --config=configs/train_abinet.yaml -
 ```
 CUDA_VISIBLE_DEVICES=0,1,2,3 python main.py --config=configs/pretrain_vision_model.yaml --phase test --checkpoint=workdir/VisionTreeSim-scene-final/best-pretrain-vision-model.pth --test_root=data/scene/scene_val/ --model_eval=vision --image_only
 ```
+
+
+
+
+## Citation
+If you find our method useful for your reserach, please cite
+```bash 
+@inproceedings{Zhang2023SANSN,
+  title={SAN: Structure-Aware Network for Complex and Long-Tailed Chinese Text Recognition},
+  author={Junyi Zhang and Chang Liu and Chun Yang},
+  booktitle={IEEE International Conference on Document Analysis and Recognition},
+  year={2023},
+  url={https://api.semanticscholar.org/CorpusID:261102024}
+}
+ ```
