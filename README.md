@@ -10,17 +10,51 @@
 
 
 
-## Test Datasets
+## Datasets
 
-Test datasets can be downloaded from [Web_test and Scene_test WeiYun (passwd: funf3i)](https://share.weiyun.com/MnIrRgo4).
+Test datasets can be downloaded from [Datasets BaiduNetDisk (passwd: 7zmh)](https://pan.baidu.com/s/1QVIGzY9OxKZZpOMbCCBKoA).
 
 Move these files to : ```SAN/data/```
 
 ## Model Result
 
-Get the model training result from [Model Result WeiYun (passwd: zmcvf4)](https://share.weiyun.com/k7DUruUp).
+Get the model training result from [Model Result BaiduNetDisk (passwd: 69th)](https://pan.baidu.com/s/1P6tUyv-qEbc10cR7oUJ5eA).
 
 Move these files to : ```SAN/workdir/```
+
+
+
+## Training
+
+1. Pre-train vision model
+    ```
+    CUDA_VISIBLE_DEVICES=0,1,2,3 python main.py --config=configs/pretrain_vision_model.yaml
+    ```
+2. Pre-train language model
+    ```
+    CUDA_VISIBLE_DEVICES=0,1,2,3 python main.py --config=configs/pretrain_language_model.yaml
+    ```
+3. Train ABINet
+    ```
+    CUDA_VISIBLE_DEVICES=0,1,2,3 python main.py --config=configs/train_abinet.yaml
+    ```
+
+
+## Notice
+
+The code I provided can be directly trained or tested on the ```Web dataset```. If you would like to train or test it on the ```Scene dataset```, you need to modify the 'max_radical_length' parameter in the code. 
+
+Specifically, please make changes in the following two parts of the code:
+
+- SAN/configs/template.yaml <u>line 22</u>:
+  
+  ```max_length_radical: 33 -> max_length_radical: 39```
+
+- SAN/dataset.py <u>line 221</u>:
+  
+  ```max_length:int=33 -> max_length:int=39 ```
+
+
 
 ## Evaluation
 
@@ -53,17 +87,3 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 python main.py --config=configs/train_abinet.yaml -
 ```
 CUDA_VISIBLE_DEVICES=0,1,2,3 python main.py --config=configs/pretrain_vision_model.yaml --phase test --checkpoint=workdir/VisionTreeSim-scene-final/best-pretrain-vision-model.pth --test_root=data/scene/scene_val/ --model_eval=vision --image_only
 ```
-
-## Notice
-
-The code I provided can be directly tested on the ```Web dataset```. If you would like to test it on the ```Scene dataset```, you need to modify the 'max_radical_length' parameter in the code. 
-
-Specifically, please make changes in the following two parts of the code:
-
-- ./configs/template.yaml <u>line 22</u>:
-  
-  ```max_length_radical: 33 -> max_length_radical: 39```
-
-- ./dataset.py <u>line 221</u>:
-  
-  ```max_length:int=33 -> max_length:int=39 ```

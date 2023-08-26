@@ -7,11 +7,11 @@ global:
  
 dataset:
   train: {
-    roots: ['data/LM_Dataset_scene/scene_label.csv'],
+    roots: ['data/LM_Dataset_web/web_label.csv'],
     batch_size: 768
   }
   test: {
-    roots: ['data/LM_Dataset_scene/scene_label_change.csv'],
+    roots: ['data/LM_Dataset_web/web_label_change.csv'],
     batch_size: 768
   }
 
