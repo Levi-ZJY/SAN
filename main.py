@@ -172,7 +172,17 @@ def _get_learner(config, data, model, local_rank=None):
     learner.split(lambda m: children(m))
 
     if config.global_phase == 'train':
-        pass
+        num_replicas = 1 if local_rank is None else torch.distributed.get_world_size()
+        phases = _get_training_phases(config, len(learner.data.train_dl)//num_replicas)
+        learner.callback_fns += [
+            partial(GeneralScheduler, phases=phases),
+            partial(GradientClipping, clip=config.optimizer_clip_grad),
+            partial(IterationCallback, name=config.global_name,
+                    show_iters=config.training_show_iters,
+                    eval_iters=config.training_eval_iters,
+                    save_iters=config.training_save_iters,
+                    start_iters=config.training_start_iters,
+                    stats_iters=config.training_stats_iters)]
     else:
         learner.callbacks += [
             DumpPrediction(learn=learner,
@@ -267,7 +277,8 @@ def main():
     learner = _get_learner(config, data, model, args.local_rank)
 
     if config.global_phase == 'train':
-        pass
+        logging.info('Start training.')
+        learner.fit(epochs=config.training_epochs, lr=config.optimizer_lr)
     else:
         logging.info('Start validate')
         last_metrics = learner.validate()

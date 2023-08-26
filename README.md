@@ -8,17 +8,20 @@ The complete SAN code will come soon...
     pip install -r requirements.txt
     ```
 
+
+
+
 ## Test Datasets
 
 Test datasets can be downloaded from [Web_test and Scene_test WeiYun (passwd: funf3i)](https://share.weiyun.com/MnIrRgo4).
 
-Move these files to : ```SAN-TestCode-main/data/```
+Move these files to : ```SAN/data/```
 
 ## Model Result
 
 Get the model training result from [Model Result WeiYun (passwd: zmcvf4)](https://share.weiyun.com/k7DUruUp).
 
-Move these files to : ```SAN-TestCode-main/workdir/```
+Move these files to : ```SAN/workdir/```
 
 ## Evaluation
 
