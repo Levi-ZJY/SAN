@@ -126,11 +126,6 @@ class MultiLosses(nn.Module):
 
     def _ce_loss(self, output, gt_labels, gt_lengths, idx=None, record=True):
         
-        """print(gt_labels)
-        print(len(gt_labels))
-        print(gt_lengths)
-        print(len(gt_lengths))"""
-        
         only_Character = False
         only_Radical = False
         only_Radical_alignment = False
@@ -149,13 +144,6 @@ class MultiLosses(nn.Module):
             else:
                 #print('！！！label_length_wrong！！！')
                 assert 1==0
-            
-            """if 'name_radical' not in output.keys():
-                only_Radical = True
-                print('！！！only_Radical！！！')
-            else: 
-                only_Radical_alignment = True
-                print('！！！only_Radical_alignment！！！')"""
         
         if 'logits' in output.keys() and 'logits_radical' in output.keys():
             both_CharacterRadical = True
@@ -250,13 +238,6 @@ class MultiLosses(nn.Module):
                 radical_labels_div.append(radical_label_div)
                 #print(radical_label)
                 
-            """
-            for i in range(len(char_labels)):
-                print(i)
-                print(char_labels[i])
-                print(radical_labels[i])
-                print(radical_labels_div[i])
-            """
              
             radical_weight = []
             for i in range(len(radical_labels_div)):
@@ -289,15 +270,6 @@ class MultiLosses(nn.Module):
                 
                 radical_weight.append(tmp)
                 
-            """
-            for i in range(len(char_labels)):
-                print(i)
-                print(char_labels[i])
-                print(radical_labels[i])
-                print(radical_labels_div[i])
-                print(len(radical_weight[i]))
-                print(radical_weight[i])
-            """
             
             num_radical_labels=[]
             num_radical_labels_nopadding=[]
@@ -317,17 +289,6 @@ class MultiLosses(nn.Module):
             #print(gt_lengths_radical)
             
             
-            """
-            for i in range(len(num_radical_labels)):
-                print(i)
-                print(char_labels[i])
-                print(radical_labels[i])
-                print(radical_labels_div[i])
-                print(num_radical_labels[i])
-                
-                print(len(radical_weight[i]))
-                print(radical_weight[i])
-            """
             
             for i in range(len(num_radical_labels)):   
                 tgt = onehot(num_radical_labels[i], self.num_classes_radical)    
@@ -342,9 +303,6 @@ class MultiLosses(nn.Module):
                 else:
                     gt_labels_radical=torch.cat((gt_labels_radical,tgt),0)
             gt_labels_radical=gt_labels_radical.cuda()
-
-            #gt_labels_radical=torch.tensor(gt_labels_radical)
-            #print("aaa:", gt_labels_radical)
 
 
             #######################################################################################
@@ -422,18 +380,10 @@ class MultiLosses(nn.Module):
         self.losses = {}
         if isinstance(outputs, (tuple, list)):
             outputs = [self._merge_list(o) for o in outputs]
-            """
-            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            print('Loss111')
-            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            """
+            
             return sum([self._ce_loss(o, *args) for o in outputs if o['loss_weight'] > 0.])
         else:             
-            """
-            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            print('Loss222')
-            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            """
+            
             return self._ce_loss(outputs, *args, record=False)
 
 
@@ -445,11 +395,7 @@ class SoftCrossEntropyLoss(nn.Module):
     def forward(self, input, target, softmax=True):
         if softmax: log_prob = F.log_softmax(input, dim=-1)
         else: log_prob = torch.log(input)
-        """
-        print(target)
-        print("##################################")
-        print(log_prob)
-        """
+        
         loss = -(target * log_prob).sum(dim=-1)
         if self.reduction == "mean": return loss.mean()
         elif self.reduction == "sum": return loss.sum()
