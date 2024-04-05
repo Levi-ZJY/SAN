@@ -57,6 +57,10 @@ Specifically, please make changes in the following two parts of the code:
   
   ```max_length:int=33 -> max_length:int=39 ```
 
+- SAN/losses.py <u>line 24</u>:
+  
+  ```self.max_length_radical = 33 -> self.max_length_radical = 39 ```
+
 
 
 ## Evaluation
